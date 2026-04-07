@@ -49,7 +49,7 @@ export default function SocialProof() {
         position: 'absolute', right: -40, top: '50%', transform: 'translateY(-50%)',
         fontFamily: 'var(--font-display)',
         fontSize: '40vw',
-        color: 'rgba(255,58,94,0.03)',
+        color: 'rgba(255,58,94,0.06)',
         lineHeight: 1,
         pointerEvents: 'none',
         userSelect: 'none',

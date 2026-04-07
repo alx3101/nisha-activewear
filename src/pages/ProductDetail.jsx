@@ -325,7 +325,7 @@ export default function ProductDetail() {
               marginBottom: 40,
               paddingBottom: 24, borderBottom: '1px solid var(--border)',
             }}>
-              TI POTREBBE <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(242,237,232,0.4)' }}>PIACERE</span>
+              TI POTREBBE <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(26,20,16,0.25)' }}>PIACERE</span>
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
               {related.map(p => <ProductCard key={p.id} product={p} />)}

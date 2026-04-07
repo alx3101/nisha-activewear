@@ -25,7 +25,7 @@ export default function Cart() {
         onClick={() => setIsOpen(false)}
         style={{
           position: 'fixed', inset: 0,
-          background: 'rgba(8,8,8,0.7)',
+          background: 'rgba(26,20,16,0.45)',
           backdropFilter: 'blur(4px)',
           zIndex: 2000, opacity: 0,
           pointerEvents: 'none',

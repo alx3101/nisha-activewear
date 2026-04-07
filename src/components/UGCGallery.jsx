@@ -140,7 +140,7 @@ function UGCItem({ img, handle, index }) {
       />
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'rgba(8,8,8,0.65)',
+        background: 'rgba(26,20,16,0.65)',
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
         gap: 8,

@@ -94,7 +94,7 @@ export default function ProductCard({ product }) {
           {/* Quick size selector on hover */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
-            background: 'rgba(8,8,8,0.85)',
+            background: 'rgba(247,244,240,0.9)',
             backdropFilter: 'blur(10px)',
             padding: '12px 16px',
             transform: hovered ? 'translateY(0)' : 'translateY(100%)',
@@ -129,7 +129,7 @@ export default function ProductCard({ product }) {
             style={{
               position: 'absolute', top: 12, right: 12,
               width: 32, height: 32,
-              background: 'rgba(8,8,8,0.7)',
+              background: 'rgba(247,244,240,0.75)',
               backdropFilter: 'blur(8px)',
               border: 'none',
               borderRadius: '50%',

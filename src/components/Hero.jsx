@@ -106,7 +106,7 @@ export default function Hero() {
       {/* Gradient overlay */}
       <div ref={overlayRef} style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.5) 40%, rgba(8,8,8,0.2) 100%)',
+        background: 'linear-gradient(to top, rgba(247,244,240,0.97) 0%, rgba(26,20,16,0.5) 40%, rgba(26,20,16,0.2) 100%)',
       }} />
 
       {/* Coral accent line */}
@@ -141,7 +141,7 @@ export default function Hero() {
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(72px, 13vw, 180px)',
             lineHeight: 0.88, letterSpacing: '-0.01em',
-            color: 'var(--white)',
+            color: '#fff',
           }}>MOVE</h1>
         </div>
         <div style={{ overflow: 'hidden', marginBottom: 8 }}>
@@ -150,7 +150,7 @@ export default function Hero() {
             fontSize: 'clamp(72px, 13vw, 180px)',
             lineHeight: 0.88, letterSpacing: '-0.01em',
             color: 'transparent',
-            WebkitTextStroke: '1px var(--white)',
+            WebkitTextStroke: '1px rgba(255,255,255,0.7)',
             display: 'inline-block',
           }}>LIKE A</h1>
         </div>
@@ -166,7 +166,7 @@ export default function Hero() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
           <p ref={subRef} style={{
             fontSize: 16, lineHeight: 1.6,
-            color: 'var(--white-dim)',
+            color: 'rgba(255,255,255,0.75)',
             maxWidth: 340, fontWeight: 300,
           }}>
             Abbigliamento sportivo premium che ti fa sentire invincibile.<br />
@@ -213,7 +213,7 @@ export default function Hero() {
         position: 'absolute', bottom: 0, right: 0,
         padding: '20px 48px',
         display: 'flex', gap: 48,
-        background: 'rgba(8,8,8,0.6)',
+        background: 'rgba(247,244,240,0.7)',
         backdropFilter: 'blur(10px)',
         borderTop: '1px solid var(--border)',
         borderLeft: '1px solid var(--border)',

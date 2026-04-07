@@ -34,7 +34,7 @@ export default function Navbar() {
         zIndex: 1000,
         padding: scrolled ? '14px 48px' : '24px 48px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: scrolled ? 'rgba(8,8,8,0.95)' : 'transparent',
+        background: scrolled ? 'rgba(247,244,240,0.97)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
         borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
         transition: 'all 0.4s var(--ease)',

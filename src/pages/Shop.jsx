@@ -82,7 +82,7 @@ export default function Shop() {
             letterSpacing: '0.02em',
           }}>
             SHOP<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(242,237,232,0.4)' }}>ALL</span>
+            <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(26,20,16,0.25)' }}>ALL</span>
           </h1>
         </div>
 

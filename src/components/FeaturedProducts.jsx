@@ -54,7 +54,7 @@ export default function FeaturedProducts() {
               lineHeight: 0.9, letterSpacing: '0.02em',
             }}>
               BESTSELLER<br />
-              <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(242,237,232,0.4)' }}>COLLECTION</span>
+              <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(26,20,16,0.25)' }}>COLLECTION</span>
             </h2>
           </div>
           <Link to="/shop" style={{

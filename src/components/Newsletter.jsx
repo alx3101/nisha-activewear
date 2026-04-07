@@ -48,7 +48,7 @@ export default function Newsletter() {
             position: 'absolute', right: -20, top: '50%', transform: 'translateY(-50%)',
             fontFamily: 'var(--font-display)',
             fontSize: '25vw', lineHeight: 1,
-            color: 'rgba(8,8,8,0.08)',
+            color: 'rgba(26,20,16,0.06)',
             pointerEvents: 'none', userSelect: 'none',
           }}>N</div>
 

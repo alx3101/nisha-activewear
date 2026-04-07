@@ -1,13 +1,13 @@
 :root {
-  --black: #080808;
-  --dark: #0f0f0f;
-  --dark-2: #1a1a1a;
-  --white: #F2EDE8;
-  --white-dim: rgba(242, 237, 232, 0.55);
+  --black: #F7F4F0;
+  --dark: #EFEBE6;
+  --dark-2: #E5E0D9;
+  --white: #1A1410;
+  --white-dim: rgba(26, 20, 16, 0.5);
   --coral: #FF3A5E;
-  --coral-dim: rgba(255, 58, 94, 0.12);
+  --coral-dim: rgba(255, 58, 94, 0.1);
   --coral-glow: rgba(255, 58, 94, 0.35);
-  --border: rgba(242, 237, 232, 0.1);
+  --border: rgba(26, 20, 16, 0.12);
   --font-display: 'Bebas Neue', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-italic: 'Playfair Display', serif;

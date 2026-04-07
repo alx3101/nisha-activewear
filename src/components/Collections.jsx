@@ -85,7 +85,7 @@ export default function Collections() {
               letterSpacing: '0.02em',
             }}>
               SHOP<br />
-              <span style={{ color: 'transparent', WebkitTextStroke: '1px var(--white)' }}>BY LOOK</span>
+              <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(26,20,16,0.3)' }}>BY LOOK</span>
             </h2>
           </div>
           <Link to="/shop" style={{
@@ -166,7 +166,7 @@ function CollectionCard({ collection, height }) {
       {/* Overlay */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(8,8,8,0.8) 0%, rgba(8,8,8,0.2) 50%, transparent 100%)',
+        background: 'linear-gradient(to top, rgba(26,20,16,0.8) 0%, rgba(26,20,16,0.2) 50%, transparent 100%)',
         transition: 'opacity 0.3s',
         opacity: hovered ? 0.9 : 0.7,
       }} />
