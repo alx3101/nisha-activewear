@@ -206,7 +206,7 @@ export default function ProductCard({ product, index = 0 }) {
                   width: 9, height: 9, borderRadius: '50%', background: product.colorHex,
                   border: product.colorHex === '#0a0a0a' ? '1px solid rgba(26,20,16,0.3)' : 'none',
                 }} />
-                <span style={{ fontSize: 10, color: 'var(--white-dim)' }}>{product.color}</span>
+                <span className="pc-color-name" style={{ fontSize: 10, color: 'var(--white-dim)' }}>{product.color}</span>
               </div>
             </div>
           </div>
@@ -220,6 +220,11 @@ export default function ProductCard({ product, index = 0 }) {
           }} />
         </div>
       </Link>
+      <style>{`
+        @media (max-width: 768px) {
+          .pc-color-name { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
