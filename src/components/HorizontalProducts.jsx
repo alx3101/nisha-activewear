@@ -80,13 +80,14 @@ export default function HorizontalProducts() {
         style={{
           overflowX: 'auto',
           paddingBottom: 16,
+          paddingLeft: 48,
+          paddingRight: 48,
           display: 'flex',
           gap: 20,
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'x mandatory',
           scrollPaddingLeft: '48px',
-          scrollPaddingRight: '48px',
           cursor: 'grab',
         }}
         onMouseDown={e => {
@@ -102,16 +103,12 @@ export default function HorizontalProducts() {
       >
         <style>{`
           .h-track::-webkit-scrollbar { display: none; }
-          .h-card-first { margin-left: 48px; }
-          .h-card-last  { margin-right: 48px; }
           @media (max-width: 768px) {
-            .h-card-first { margin-left: 20px; }
-            .h-card-last  { margin-right: 20px; }
-            .h-track { scroll-padding-left: 20px; scroll-padding-right: 20px; }
+            .h-track { padding-left: 20px !important; padding-right: 20px !important; scroll-padding-left: 20px; }
           }
         `}</style>
         {products.map((p, i) => (
-          <div key={p.id} className={`h-card${i === 0 ? ' h-card-first' : ''}${i === products.length - 1 ? ' h-card-last' : ''}`} style={{ flexShrink: 0, width: 'clamp(200px, 60vw, 300px)', scrollSnapAlign: 'start' }}>
+          <div key={p.id} className="h-card" style={{ flexShrink: 0, width: 'clamp(200px, 60vw, 300px)', scrollSnapAlign: 'start' }}>
             <HCard product={p} index={i} />
           </div>
         ))}
