@@ -160,8 +160,8 @@ export default function ProductCard({ product, index = 0 }) {
         {/* ── Info ── */}
         <div style={{ padding: '14px 2px 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-            <h3 style={{ fontSize: 13, fontWeight: 500, lineHeight: 1.3, letterSpacing: '0.01em' }}>{product.name}</h3>
-            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <h3 style={{ fontSize: 13, fontWeight: 500, lineHeight: 1.3, letterSpacing: '0.01em', minHeight: '2.6em' }}>{product.name}</h3>
+            <div style={{ textAlign: 'right', flexShrink: 0, minHeight: 34 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: product.originalPrice ? 'var(--coral)' : 'var(--white)' }}>
                 €{product.price}
               </div>
