@@ -86,6 +86,7 @@ export default function HorizontalProducts() {
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'x mandatory',
           scrollPaddingLeft: '48px',
+          scrollPaddingRight: '48px',
           cursor: 'grab',
         }}
         onMouseDown={e => {
@@ -106,7 +107,7 @@ export default function HorizontalProducts() {
           @media (max-width: 768px) {
             .h-card-first { margin-left: 20px; }
             .h-card-last  { margin-right: 20px; }
-            .h-track { scroll-padding-left: 20px; }
+            .h-track { scroll-padding-left: 20px; scroll-padding-right: 20px; }
           }
         `}</style>
         {products.map((p, i) => (
