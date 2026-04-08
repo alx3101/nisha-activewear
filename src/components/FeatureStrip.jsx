@@ -88,6 +88,7 @@ export default function FeatureStrip() {
         <div
           key={i}
           ref={el => panelsRef.current[i] = el}
+          className="fs-panel"
           style={{
             display: 'grid',
             gridTemplateColumns: i % 2 === 0 ? '55% 45%' : '45% 55%',
@@ -109,13 +110,20 @@ export default function FeatureStrip() {
           )}
         </div>
       ))}
+      <style>{`
+        @media (max-width: 768px) {
+          .fs-panel { grid-template-columns: 1fr !important; min-height: unset !important; }
+          .fs-img { min-height: 280px !important; order: -1; }
+          .fs-txt { padding: 40px 18px !important; order: 0; }
+        }
+      `}</style>
     </section>
   );
 }
 
 function ImagePanel({ imgRef, src, tag }) {
   return (
-    <div style={{ position: 'relative', overflow: 'hidden', minHeight: 500 }}>
+    <div className="fs-img" style={{ position: 'relative', overflow: 'hidden', minHeight: 500 }}>
       <img
         ref={imgRef}
         src={src}
@@ -144,7 +152,7 @@ function ImagePanel({ imgRef, src, tag }) {
 
 function TextPanel({ textRef, f, reverse }) {
   return (
-    <div style={{
+    <div className="fs-txt" style={{
       display: 'flex', alignItems: 'center',
       padding: reverse ? '80px 80px 80px 64px' : '80px 64px 80px 80px',
       background: 'var(--black)',

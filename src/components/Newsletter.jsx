@@ -33,7 +33,7 @@ export default function Newsletter() {
       background: 'var(--black)',
     }}>
       <div className="container">
-        <div ref={innerRef} style={{
+        <div ref={innerRef} className="nl-inner" style={{
           background: 'var(--coral)',
           padding: '80px 80px',
           position: 'relative',
@@ -135,8 +135,8 @@ export default function Newsletter() {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
-          section > div > div { grid-template-columns: 1fr !important; padding: 48px 32px !important; }
+        @media (max-width: 768px) {
+          .nl-inner { grid-template-columns: 1fr !important; padding: 48px 24px !important; }
         }
       `}</style>
     </section>

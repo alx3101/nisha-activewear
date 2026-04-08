@@ -84,7 +84,7 @@ export default function ProductDetail() {
   const discount = product.originalPrice ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
 
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh', paddingTop: 80 }}>
+    <div style={{ background: 'var(--black)', minHeight: '100vh', paddingTop: 102 }}>
 
       {/* ── MAIN SPLIT ── */}
       <div className="pd-grid">

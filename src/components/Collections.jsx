@@ -62,7 +62,7 @@ export default function Collections() {
     <section ref={sectionRef} style={{ padding: '120px 0 60px', background: 'var(--black)' }}>
       <div className="container">
         {/* Header */}
-        <div ref={headerRef} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 72 }}>
+        <div ref={headerRef} className="col-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 72 }}>
           <div>
             <div style={{ fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--coral)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
               <div style={{ width: 24, height: 1.5, background: 'var(--coral)' }} />
@@ -89,7 +89,14 @@ export default function Collections() {
           ))}
         </div>
       </div>
-      <style>{`@media(max-width:768px){.col-row{grid-template-columns:1fr!important;height:auto!important}.col-img{height:300px!important}}`}</style>
+      <style>{`
+        @media (max-width: 768px) {
+          .col-row  { grid-template-columns: 1fr !important; height: auto !important; }
+          .col-img  { height: 260px !important; order: -1 !important; }
+          .col-text { padding: 28px 18px !important; order: 0 !important; }
+          .col-header { margin-bottom: 36px !important; }
+        }
+      `}</style>
     </section>
   );
 }

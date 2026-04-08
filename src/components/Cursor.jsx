@@ -87,7 +87,6 @@ export default function Cursor() {
         background: 'var(--coral)', borderRadius: '50%',
         pointerEvents: 'none', zIndex: 9999,
         transform: 'translate(-50%, -50%)',
-        mixBlendMode: 'multiply',
       }} />
       {/* Ring */}
       <div ref={ringRef} style={{

@@ -38,7 +38,7 @@ export default function BrandStory() {
       );
 
       // Parallax on image
-      gsap.to(imgRef.current.querySelector('img'),
+      gsap.to(imgRef.current.querySelector('div img'),
         {
           yPercent: 12,
           ease: 'none',
@@ -92,20 +92,23 @@ export default function BrandStory() {
           gap: 100, alignItems: 'center',
         }}>
           {/* Image side */}
-          <div ref={imgRef} style={{ position: 'relative', overflow: 'hidden' }}>
-            <img
-              src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=900&q=90"
-              alt="Nisha Brand Story"
-              style={{
-                width: '100%', aspectRatio: '4/5',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
+          <div ref={imgRef} style={{ position: 'relative' }}>
+            <div style={{ overflow: 'hidden' }}>
+              <img
+                src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=900&q=90"
+                alt="Nisha Brand Story"
+                style={{
+                  width: '100%', aspectRatio: '4/5',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            </div>
             {/* Floating year card */}
             <div style={{
               position: 'absolute', bottom: -20, right: -20,
               background: 'var(--coral)', padding: '28px 32px',
+              zIndex: 2,
             }}>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 52, lineHeight: 1, color: '#fff' }}>2021</div>
               <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>

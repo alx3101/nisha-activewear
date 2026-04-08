@@ -7,125 +7,118 @@ import { useCart } from '../context/CartContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function useIsMobile() {
-  const [mobile, setMobile] = useState(() => window.innerWidth <= 768);
-  useEffect(() => {
-    const handler = () => setMobile(window.innerWidth <= 768);
-    window.addEventListener('resize', handler, { passive: true });
-    return () => window.removeEventListener('resize', handler);
-  }, []);
-  return mobile;
-}
-
 export default function HorizontalProducts() {
-  const isMobile    = useIsMobile();
   const sectionRef  = useRef(null);
   const trackRef    = useRef(null);
   const headerRef   = useRef(null);
+  const progressRef = useRef(null);
 
+  // Reveal header + cards on scroll enter
   useEffect(() => {
-    if (isMobile) return;
-
-    const section = sectionRef.current;
-    const track   = trackRef.current;
-    if (!section || !track) return;
-
     const ctx = gsap.context(() => {
       gsap.fromTo(headerRef.current,
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, scrollTrigger: { trigger: section, start: 'top 80%' } }
+        { y: 0, opacity: 1, duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } }
       );
 
-      const totalWidth = track.scrollWidth - track.clientWidth;
-
-      gsap.to(track, {
-        x: -totalWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${totalWidth}`,
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // Card stagger reveals
-      track.querySelectorAll('.h-card').forEach((card, i) => {
-        gsap.fromTo(card,
-          { opacity: 0.3, scale: 0.95, y: 20 },
-          {
-            opacity: 1, scale: 1, y: 0, duration: 0.5,
-            scrollTrigger: {
-              trigger: section,
-              start: `top+=${i * 100} top`,
-              end:   `top+=${i * 100 + 80} top`,
-              toggleActions: 'play none none reverse',
-            },
-          }
+      const cards = trackRef.current?.querySelectorAll('.h-card');
+      if (cards?.length) {
+        gsap.fromTo(cards,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.07, duration: 0.55, ease: 'power2.out',
+            scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
         );
-      });
+      }
     });
 
     return () => ctx.revert();
-  }, [isMobile]);
+  }, []);
 
-  /* ── Header shared ── */
-  const Header = () => (
-    <div ref={headerRef} className="container" style={{ marginBottom: isMobile ? 28 : 40, flexShrink: 0 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <div>
-          <div style={{ fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--coral)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 24, height: 1.5, background: 'var(--coral)' }} />
-            {isMobile ? 'Prodotti' : 'Scorri per Scoprire'}
-          </div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5.5vw, 72px)', lineHeight: 0.9, letterSpacing: '0.02em' }}>
-            LA NOSTRA <span style={{ color: 'var(--coral)' }}>COLLEZIONE</span>
-          </h2>
-        </div>
-        <Link to="/shop" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white-dim)', transition: 'color 0.2s' }}
-          onMouseEnter={e => e.currentTarget.style.color = 'var(--coral)'}
-          onMouseLeave={e => e.currentTarget.style.color = 'var(--white-dim)'}
-        >
-          Vedi Tutto
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </Link>
-      </div>
-    </div>
-  );
+  // Update progress bar on horizontal scroll
+  useEffect(() => {
+    const track = trackRef.current;
+    const bar   = progressRef.current;
+    if (!track || !bar) return;
 
-  /* ── Mobile: simple scrollable grid ── */
-  if (isMobile) {
-    return (
-      <section style={{ padding: '80px 0 60px', background: 'var(--dark)' }}>
-        <Header />
-        <div style={{ overflowX: 'auto', paddingLeft: 20, paddingRight: 20, paddingBottom: 8, WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
-          <div style={{ display: 'flex', gap: 14, width: 'max-content' }}>
-            {products.map((p, i) => (
-              <div key={p.id} style={{ width: 220, flexShrink: 0, scrollSnapAlign: 'start' }}>
-                <HCard product={p} index={i} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
+    const onScroll = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (!max) return;
+      bar.style.transform = `scaleX(${track.scrollLeft / max})`;
+    };
+    track.addEventListener('scroll', onScroll, { passive: true });
+    return () => track.removeEventListener('scroll', onScroll);
+  }, []);
 
-  /* ── Desktop: pinned horizontal scroll ── */
   return (
-    <section ref={sectionRef} style={{ height: '100vh', overflow: 'hidden', background: 'var(--dark)' }}>
-      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
-        <Header />
-        <div ref={trackRef} style={{ display: 'flex', gap: 20, paddingLeft: 48, paddingRight: 48, willChange: 'transform', flexShrink: 0 }}>
-          {products.map((p, i) => (
-            <div key={p.id} className="h-card" style={{ flexShrink: 0, width: 'clamp(240px, 20vw, 320px)' }}>
-              <HCard product={p} index={i} />
+    <section ref={sectionRef} style={{ padding: '100px 0 80px', background: 'var(--dark)', overflow: 'hidden' }}>
+      {/* Header */}
+      <div ref={headerRef} className="container" style={{ marginBottom: 48 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--coral)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 24, height: 1.5, background: 'var(--coral)' }} />
+              Scorri per Scoprire
             </div>
-          ))}
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5.5vw, 72px)', lineHeight: 0.9, letterSpacing: '0.02em', paddingLeft: 32 }}>
+              LA NOSTRA <span style={{ color: 'var(--coral)' }}>COLLEZIONE</span>
+            </h2>
+          </div>
+          <Link to="/shop" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white-dim)', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--coral)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--white-dim)'}
+          >
+            Vedi Tutto
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </Link>
         </div>
+      </div>
+
+      {/* Scrollable track */}
+      <div
+        ref={trackRef}
+        style={{
+          overflowX: 'auto',
+          paddingBottom: 16,
+          display: 'flex',
+          gap: 20,
+          scrollbarWidth: 'none',
+          WebkitOverflowScrolling: 'touch',
+          scrollSnapType: 'x mandatory',
+          cursor: 'grab',
+        }}
+        onMouseDown={e => {
+          const el = e.currentTarget;
+          el.style.cursor = 'grabbing';
+          const startX = e.pageX - el.offsetLeft;
+          const scrollLeft = el.scrollLeft;
+          const onMove = ev => { el.scrollLeft = scrollLeft - (ev.pageX - el.offsetLeft - startX); };
+          const onUp   = ()  => { el.style.cursor = 'grab'; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+          window.addEventListener('mousemove', onMove);
+          window.addEventListener('mouseup', onUp);
+        }}
+      >
+        <style>{`
+          .h-track::-webkit-scrollbar { display: none; }
+          @media (max-width: 768px) {
+            .h-card-first { margin-left: 18px !important; }
+            .h-card-last  { margin-right: 18px !important; }
+          }
+          @media (max-width: 480px) {
+            .h-card-first { margin-left: 14px !important; }
+            .h-card-last  { margin-right: 14px !important; }
+          }
+        `}</style>
+        {products.map((p, i) => (
+          <div key={p.id} className={`h-card${i === 0 ? ' h-card-first' : ''}${i === products.length - 1 ? ' h-card-last' : ''}`} style={{ flexShrink: 0, width: 'clamp(200px, 60vw, 300px)', scrollSnapAlign: 'start', marginLeft: i === 0 ? 48 : 0, marginRight: i === products.length - 1 ? 48 : 0 }}>
+            <HCard product={p} index={i} />
+          </div>
+        ))}
+      </div>
+
+      {/* Progress bar */}
+      <div className="hp-progress-wrap" style={{ margin: '28px 48px 0 48px', height: 1, background: 'var(--border)' }}>
+        <style>{`@media(max-width:768px){.hp-progress-wrap{margin:20px 18px 0!important}}`}</style>
+        <div ref={progressRef} style={{ height: '100%', background: 'var(--coral)', transformOrigin: 'left', transform: 'scaleX(0)', transition: 'transform 0.1s linear' }} />
       </div>
     </section>
   );
@@ -169,19 +162,16 @@ function HCard({ product, index }) {
           <img src={product.image} alt={product.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.45s, transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94)', opacity: hovered ? 0 : 1, transform: hovered ? 'scale(1.06)' : 'scale(1)' }} />
           <img src={product.hoverImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.45s, transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94)', opacity: hovered ? 1 : 0, transform: hovered ? 'scale(1)' : 'scale(1.06)' }} />
 
-          {/* Index */}
           <span style={{ position: 'absolute', top: 10, left: 12, fontFamily: 'var(--font-display)', fontSize: 10, letterSpacing: '0.12em', color: 'rgba(26,20,16,0.35)' }}>
             {String(index + 1).padStart(2, '0')}
           </span>
 
-          {/* Badge */}
           {product.badge && (
             <span style={{ position: 'absolute', top: 10, right: 12, background: BADGE[product.badge] || 'var(--coral)', color: product.badge === 'SALE' || product.badge === 'TOP RATED' ? '#000' : '#fff', fontSize: 8, fontWeight: 700, letterSpacing: '0.15em', padding: '4px 9px' }}>
               {product.badge}
             </span>
           )}
 
-          {/* Quick add */}
           <button onClick={handleAdd} style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             padding: '12px', background: added ? '#00C896' : 'rgba(247,244,240,0.95)',
@@ -195,7 +185,6 @@ function HCard({ product, index }) {
           </button>
         </div>
 
-        {/* Info */}
         <div style={{ padding: '12px 0 0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 5 }}>
             <h3 style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.3 }}>{product.name}</h3>
@@ -209,7 +198,6 @@ function HCard({ product, index }) {
             ))}
             <span style={{ fontSize: 9, color: 'var(--white-dim)', marginLeft: 3 }}>({product.reviews})</span>
           </div>
-          {/* Bottom coral line */}
           <div style={{ height: 1.5, background: 'var(--coral)', marginTop: 10, transformOrigin: 'left', transform: hovered ? 'scaleX(1)' : 'scaleX(0)', transition: 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)' }} />
         </div>
       </Link>

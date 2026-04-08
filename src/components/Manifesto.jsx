@@ -70,7 +70,7 @@ export default function Manifesto() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{
+    <section ref={sectionRef} className="manifesto" style={{
       position: 'relative',
       minHeight: '100vh',
       display: 'grid',
@@ -132,7 +132,7 @@ export default function Manifesto() {
       </div>
 
       {/* Right — image */}
-      <div style={{ position: 'relative', overflow: 'hidden', minHeight: 600 }}>
+      <div className="manifesto-img" style={{ position: 'relative', overflow: 'hidden', minHeight: 600 }}>
         <img
           ref={imgRef}
           src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=900&q=90"
@@ -170,8 +170,8 @@ export default function Manifesto() {
 
       <style>{`
         @media (max-width: 900px) {
-          section { grid-template-columns: 1fr !important; }
-          section > div:last-child { min-height: 400px !important; }
+          section.manifesto { grid-template-columns: 1fr !important; }
+          .manifesto-img { min-height: 400px !important; }
         }
       `}</style>
     </section>

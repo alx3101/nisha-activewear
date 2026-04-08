@@ -95,7 +95,7 @@ export default function SocialProof() {
         </div>
 
         {/* Rating bars */}
-        <div style={{
+        <div className="sp-grid" style={{
           display: 'grid', gridTemplateColumns: '280px 1fr',
           gap: 80, alignItems: 'start',
         }}>
@@ -195,8 +195,8 @@ export default function SocialProof() {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
-          section > div > div:last-child { grid-template-columns: 1fr !important; gap: 40px !important; }
+        @media (max-width: 768px) {
+          .sp-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
         }
       `}</style>
     </section>

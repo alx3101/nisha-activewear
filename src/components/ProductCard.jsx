@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { useCart } from '../context/CartContext';
@@ -21,25 +21,9 @@ export default function ProductCard({ product, index = 0 }) {
   const panelRef                  = useRef(null);
   const btnRef                    = useRef(null);
 
-  /* 3-D tilt on mouse move */
-  const onMove = (e) => {
-    const el  = cardRef.current;
-    const rect = el.getBoundingClientRect();
-    const x   = (e.clientX - rect.left) / rect.width  - 0.5;
-    const y   = (e.clientY - rect.top)  / rect.height - 0.5;
-    gsap.to(el, {
-      rotateY: x * 10, rotateX: -y * 6,
-      duration: 0.4, ease: 'power2.out',
-      transformPerspective: 900,
-    });
-  };
   const onLeave = () => {
     setHovered(false);
     setSize(null);
-    gsap.to(cardRef.current, {
-      rotateY: 0, rotateX: 0,
-      duration: 0.8, ease: 'elastic.out(1,0.5)',
-    });
   };
 
   /* Magnetic CTA */
@@ -70,9 +54,8 @@ export default function ProductCard({ product, index = 0 }) {
     <div
       ref={cardRef}
       onMouseEnter={() => setHovered(true)}
-      onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ position: 'relative', transformStyle: 'preserve-3d', willChange: 'transform' }}
+      style={{ position: 'relative' }}
     >
       <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
 
@@ -123,21 +106,6 @@ export default function ProductCard({ product, index = 0 }) {
             opacity: hovered ? 1 : 0,
             transform: hovered ? 'scale(1)' : 'scale(1.05)',
           }} />
-
-          {/* Wishlist */}
-          <button onClick={e => e.preventDefault()} style={{
-            position: 'absolute', top: 14, right: badge ? 74 : 14, zIndex: 4,
-            width: 32, height: 32, borderRadius: '50%',
-            background: 'rgba(247,244,240,0.85)', backdropFilter: 'blur(8px)',
-            border: 'none', color: '#1A1410',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: hovered ? 1 : 0,
-            transition: 'opacity 0.3s',
-          }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
 
           {/* Hover panel: sizes + CTA */}
           <div ref={panelRef} style={{
@@ -205,7 +173,7 @@ export default function ProductCard({ product, index = 0 }) {
             </div>
           </div>
 
-          {/* Stars + color */}
+          {/* Stars + color + wishlist */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               {[...Array(5)].map((_, i) => (
@@ -217,12 +185,29 @@ export default function ProductCard({ product, index = 0 }) {
               ))}
               <span style={{ fontSize: 10, color: 'var(--white-dim)', marginLeft: 2 }}>({product.reviews})</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-              <div style={{
-                width: 9, height: 9, borderRadius: '50%', background: product.colorHex,
-                border: product.colorHex === '#0a0a0a' ? '1px solid rgba(26,20,16,0.3)' : 'none',
-              }} />
-              <span style={{ fontSize: 10, color: 'var(--white-dim)' }}>{product.color}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* Wishlist */}
+              <button onClick={e => e.preventDefault()} style={{
+                width: 26, height: 26, borderRadius: '50%',
+                background: 'none', border: '1px solid var(--border)',
+                color: 'var(--white-dim)', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'border-color 0.2s, color 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--coral)'; e.currentTarget.style.color = 'var(--coral)'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--white-dim)'; }}
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <div style={{
+                  width: 9, height: 9, borderRadius: '50%', background: product.colorHex,
+                  border: product.colorHex === '#0a0a0a' ? '1px solid rgba(26,20,16,0.3)' : 'none',
+                }} />
+                <span style={{ fontSize: 10, color: 'var(--white-dim)' }}>{product.color}</span>
+              </div>
             </div>
           </div>
 

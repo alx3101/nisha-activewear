@@ -16,6 +16,9 @@ gsap.registerPlugin(ScrollTrigger);
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
+    // Reset any overflow:hidden left by GSAP ScrollTrigger pins
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);
   return null;
