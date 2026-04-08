@@ -135,7 +135,7 @@ export default function Footer() {
           flexWrap: 'wrap', gap: 12,
         }}>
           <div style={{ fontSize: 12, color: 'var(--white-dim)' }}>
-            © 2025 Nisha Activewear. Tutti i diritti riservati.
+            © {new Date().getFullYear()} Nisha Activewear. Tutti i diritti riservati.
           </div>
           <div style={{ display: 'flex', gap: 24 }}>
             {['Privacy Policy', 'Cookie Policy', 'Termini e Condizioni'].map(item => (
