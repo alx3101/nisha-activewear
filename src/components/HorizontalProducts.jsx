@@ -88,7 +88,6 @@ export default function HorizontalProducts() {
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'x mandatory',
           scrollPaddingLeft: '48px',
-          cursor: 'grab',
         }}
         onMouseDown={e => {
           const el = e.currentTarget;
@@ -96,13 +95,17 @@ export default function HorizontalProducts() {
           const startX = e.pageX - el.offsetLeft;
           const scrollLeft = el.scrollLeft;
           const onMove = ev => { el.scrollLeft = scrollLeft - (ev.pageX - el.offsetLeft - startX); };
-          const onUp   = ()  => { el.style.cursor = 'grab'; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+          const onUp   = ()  => { el.style.cursor = ''; window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
           window.addEventListener('mousemove', onMove);
           window.addEventListener('mouseup', onUp);
         }}
       >
         <style>{`
           .h-track::-webkit-scrollbar { display: none; }
+          @media (hover: hover) {
+            .h-track { cursor: grab; }
+            .h-track:active { cursor: grabbing; }
+          }
           @media (max-width: 768px) {
             .h-track { padding-left: 20px !important; padding-right: 20px !important; scroll-padding-left: 20px; }
           }
