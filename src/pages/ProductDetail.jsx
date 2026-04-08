@@ -92,9 +92,9 @@ export default function ProductDetail() {
         {/* ── LEFT: Gallery ── */}
         <div ref={leftRef} className="pd-left">
           {/* Main image */}
-          <div style={{ position: 'relative', overflow: 'hidden', background: '#EDEAE5' }} className="pd-main-img">
+          <div style={{ position: 'relative', overflow: 'hidden', background: '#EDEAE5', width: '100%' }} className="pd-main-img">
             <img ref={imgMain} src={imgs[activeImg]} alt={product.name} style={{
-              width: '100%', height: '100%', objectFit: 'cover',
+              width: '100%', height: '100%', objectFit: 'cover', display: 'block',
               transition: 'opacity 0.4s ease, transform 0.6s ease',
             }} />
 
@@ -369,25 +369,22 @@ export default function ProductDetail() {
         .pd-grid {
           display: grid;
           grid-template-columns: 52% 48%;
-          min-height: 100vh;
+          align-items: start;
         }
         .pd-left {
           position: sticky;
-          top: 80px;
-          height: calc(100vh - 80px);
+          top: 102px;
+          align-self: start;
           display: flex;
           flex-direction: column;
           padding: 24px 24px 24px 48px;
           gap: 8px;
-          overflow: hidden;
         }
         .pd-main-img {
-          flex: 1;
-          min-height: 0;
+          aspect-ratio: 2/3;
         }
         .pd-right {
           padding: 48px 80px 80px 48px;
-          overflow-y: auto;
         }
         .reviews-grid {
           display: grid;

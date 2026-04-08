@@ -76,6 +76,7 @@ export default function HorizontalProducts() {
       {/* Scrollable track */}
       <div
         ref={trackRef}
+        className="h-track"
         style={{
           overflowX: 'auto',
           paddingBottom: 16,
@@ -84,6 +85,7 @@ export default function HorizontalProducts() {
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'x mandatory',
+          scrollPaddingLeft: '48px',
           cursor: 'grab',
         }}
         onMouseDown={e => {
@@ -99,17 +101,16 @@ export default function HorizontalProducts() {
       >
         <style>{`
           .h-track::-webkit-scrollbar { display: none; }
+          .h-card-first { margin-left: 48px; }
+          .h-card-last  { margin-right: 48px; }
           @media (max-width: 768px) {
-            .h-card-first { margin-left: 18px !important; }
-            .h-card-last  { margin-right: 18px !important; }
-          }
-          @media (max-width: 480px) {
-            .h-card-first { margin-left: 14px !important; }
-            .h-card-last  { margin-right: 14px !important; }
+            .h-card-first { margin-left: 20px; }
+            .h-card-last  { margin-right: 20px; }
+            .h-track { scroll-padding-left: 20px; }
           }
         `}</style>
         {products.map((p, i) => (
-          <div key={p.id} className={`h-card${i === 0 ? ' h-card-first' : ''}${i === products.length - 1 ? ' h-card-last' : ''}`} style={{ flexShrink: 0, width: 'clamp(200px, 60vw, 300px)', scrollSnapAlign: 'start', marginLeft: i === 0 ? 48 : 0, marginRight: i === products.length - 1 ? 48 : 0 }}>
+          <div key={p.id} className={`h-card${i === 0 ? ' h-card-first' : ''}${i === products.length - 1 ? ' h-card-last' : ''}`} style={{ flexShrink: 0, width: 'clamp(200px, 60vw, 300px)', scrollSnapAlign: 'start' }}>
             <HCard product={p} index={i} />
           </div>
         ))}
@@ -117,7 +118,7 @@ export default function HorizontalProducts() {
 
       {/* Progress bar */}
       <div className="hp-progress-wrap" style={{ margin: '28px 48px 0 48px', height: 1, background: 'var(--border)' }}>
-        <style>{`@media(max-width:768px){.hp-progress-wrap{margin:20px 18px 0!important}}`}</style>
+        <style>{`@media(max-width:768px){.hp-progress-wrap{margin:20px 20px 0!important}}`}</style>
         <div ref={progressRef} style={{ height: '100%', background: 'var(--coral)', transformOrigin: 'left', transform: 'scaleX(0)', transition: 'transform 0.1s linear' }} />
       </div>
     </section>
@@ -131,16 +132,8 @@ function HCard({ product, index }) {
   const cardRef               = useRef(null);
   const { addItem }           = useCart();
 
-  const onMove = (e) => {
-    const el   = cardRef.current;
-    const rect = el.getBoundingClientRect();
-    const x    = (e.clientX - rect.left) / rect.width  - 0.5;
-    const y    = (e.clientY - rect.top)  / rect.height - 0.5;
-    gsap.to(el, { rotateY: x * 10, rotateX: -y * 6, duration: 0.35, ease: 'power2.out', transformPerspective: 800 });
-  };
   const onLeave = () => {
     setHovered(false);
-    gsap.to(cardRef.current, { rotateY: 0, rotateX: 0, duration: 0.7, ease: 'elastic.out(1,0.5)' });
   };
 
   const handleAdd = (e) => {
@@ -153,9 +146,7 @@ function HCard({ product, index }) {
   const BADGE = { BESTSELLER: '#FF3A5E', SALE: '#FFB800', NEW: '#1A1410', 'TOP RATED': '#fff', TRENDING: '#7B61FF' };
 
   return (
-    <div ref={cardRef} onMouseMove={onMove} onMouseEnter={() => setHovered(true)} onMouseLeave={onLeave}
-      style={{ willChange: 'transform', transformStyle: 'preserve-3d' }}
-    >
+    <div ref={cardRef} onMouseEnter={() => setHovered(true)} onMouseLeave={onLeave}>
       <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
         {/* Image */}
         <div style={{ position: 'relative', overflow: 'hidden', aspectRatio: '2/3', background: '#EDEAE5' }}>
