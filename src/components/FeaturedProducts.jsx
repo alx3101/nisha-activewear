@@ -76,8 +76,8 @@ export default function FeaturedProducts() {
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 24,
         }}>
-          {featured.map(p => (
-            <ProductCard key={p.id} product={p} />
+          {featured.map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
       </div>

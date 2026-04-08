@@ -18,12 +18,12 @@ export default function BrandStory() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Image clip-path reveal
+      // Image reveal
       gsap.fromTo(imgRef.current,
-        { clipPath: 'inset(0% 100% 0% 0%)' },
+        { opacity: 0, x: -30 },
         {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 1.4, ease: 'expo.out',
+          opacity: 1, x: 0,
+          duration: 1, ease: 'power3.out',
           scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' }
         }
       );

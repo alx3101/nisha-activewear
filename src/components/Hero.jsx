@@ -36,10 +36,10 @@ export default function Hero() {
   useEffect(() => {
     const tl = gsap.timeline({ delay: 0.3 });
 
-    // Image reveal via clip-path
+    // Image reveal — opacity only (no clipPath flash on mount)
     tl.fromTo(imgBgRef.current,
-      { clipPath: 'inset(100% 0% 0% 0%)' },
-      { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.out' }
+      { opacity: 0, scale: 1.08 },
+      { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' }
     )
     // Overlay
     .fromTo(overlayRef.current,

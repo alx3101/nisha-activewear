@@ -8,7 +8,7 @@ export default function Footer() {
       padding: '80px 0 32px',
     }}>
       <div className="container">
-        <div style={{
+        <div className="footer-grid" style={{
           display: 'grid',
           gridTemplateColumns: '2fr 1fr 1fr 1fr',
           gap: 60, marginBottom: 64,

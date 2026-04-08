@@ -37,10 +37,10 @@ export default function Manifesto() {
 
     // Clip-path reveal on section enter
     gsap.fromTo(imgRef.current,
-      { clipPath: 'inset(0% 100% 0% 0%)' },
+      { opacity: 0, scale: 1.05 },
       {
-        clipPath: 'inset(0% 0% 0% 0%)',
-        duration: 1.4, ease: 'expo.out',
+        opacity: 1, scale: 1,
+        duration: 1, ease: 'power2.out',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 85%',

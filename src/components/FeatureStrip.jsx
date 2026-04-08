@@ -42,10 +42,10 @@ export default function FeatureStrip() {
 
         // Image reveal
         gsap.fromTo(img,
-          { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.1 },
+          { opacity: 0, scale: 1.08 },
           {
-            clipPath: 'inset(0% 0% 0% 0%)', scale: 1,
-            duration: 1.2, ease: 'expo.out',
+            opacity: 1, scale: 1,
+            duration: 1, ease: 'power2.out',
             scrollTrigger: {
               trigger: panel,
               start: 'top 75%',

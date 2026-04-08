@@ -1,169 +1,220 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { products } from '../data/products';
 import ProductCard from '../components/ProductCard';
 
-const CATEGORIES = [
-  { key: 'all', label: 'Tutti' },
-  { key: 'sets', label: 'Sets' },
-  { key: 'leggings', label: 'Leggings' },
-  { key: 'tops', label: 'Tops' },
+gsap.registerPlugin(ScrollTrigger);
+
+const CATS = [
+  { key: 'all',      label: 'Tutti',    count: 8 },
+  { key: 'sets',     label: 'Sets',     count: 2 },
+  { key: 'leggings', label: 'Leggings', count: 3 },
+  { key: 'tops',     label: 'Tops',     count: 3 },
+];
+const SORTS = [
+  { key: 'featured',   label: 'In Evidenza' },
+  { key: 'price-asc',  label: 'Prezzo ↑' },
+  { key: 'price-desc', label: 'Prezzo ↓' },
+  { key: 'rating',     label: 'Valutazione' },
 ];
 
-const SORT_OPTIONS = [
-  { key: 'featured', label: 'In Evidenza' },
-  { key: 'price-asc', label: 'Prezzo: Crescente' },
-  { key: 'price-desc', label: 'Prezzo: Decrescente' },
-  { key: 'rating', label: 'Meglio Valutati' },
-];
+const CAT_IMAGES = {
+  all:      'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=1600&q=85',
+  sets:     'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1600&q=85',
+  leggings: 'https://images.unsplash.com/photo-1518310952931-b1de897abd40?w=1600&q=85',
+  tops:     'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1600&q=85',
+};
 
 export default function Shop() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState(searchParams.get('cat') || 'all');
+  const [sp, setSp]     = useSearchParams();
+  const [cat, setCat]   = useState(sp.get('cat') || 'all');
   const [sort, setSort] = useState('featured');
-  const headerRef = useRef(null);
-  const gridRef = useRef(null);
+  const isFirstRender   = useRef(true);
+  const gridRef         = useRef(null);
+  const heroRef         = useRef(null);
 
+  // Sync cat with URL params
   useEffect(() => {
-    gsap.fromTo(headerRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-    );
-  }, []);
+    const c = sp.get('cat');
+    setCat(c || 'all');
+  }, [sp]);
 
+  // Animate grid only on filter/sort CHANGE (not initial mount)
   useEffect(() => {
-    const cat = searchParams.get('cat');
-    if (cat) setActiveCategory(cat);
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (gridRef.current) {
-      const cards = gridRef.current.children;
-      gsap.fromTo(cards,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.07, duration: 0.5, ease: 'power2.out' }
-      );
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [activeCategory, sort]);
+    if (!gridRef.current) return;
+    const cards = Array.from(gridRef.current.children);
+    if (!cards.length) return;
+    gsap.fromTo(cards,
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.06, duration: 0.45, ease: 'power2.out', overwrite: true }
+    );
+  }, [cat, sort]);
 
-  const handleCategory = (cat) => {
-    setActiveCategory(cat);
-    if (cat === 'all') searchParams.delete('cat');
-    else searchParams.set('cat', cat);
-    setSearchParams(searchParams);
+  const handleCat = (k) => {
+    setCat(k);
+    if (k === 'all') sp.delete('cat'); else sp.set('cat', k);
+    setSp(sp);
   };
 
-  const filtered = products
-    .filter(p => activeCategory === 'all' || p.category === activeCategory)
+  const list = products
+    .filter(p => cat === 'all' || p.category === cat)
     .sort((a, b) => {
-      if (sort === 'price-asc') return a.price - b.price;
+      if (sort === 'price-asc')  return a.price - b.price;
       if (sort === 'price-desc') return b.price - a.price;
-      if (sort === 'rating') return b.rating - a.rating;
+      if (sort === 'rating')     return b.rating - a.rating;
       return 0;
     });
 
+  const catLabel = CATS.find(c => c.key === cat)?.label || 'Tutti';
+
   return (
-    <div style={{ paddingTop: 100, minHeight: '100vh', background: 'var(--black)' }}>
-      <div className="container">
-        {/* Header */}
-        <div ref={headerRef} style={{ paddingTop: 48, paddingBottom: 48 }}>
+    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+
+      {/* ── Editorial Hero ── */}
+      <div ref={heroRef} style={{
+        position: 'relative',
+        height: 'clamp(340px, 45vh, 520px)',
+        overflow: 'hidden',
+        paddingTop: 80,         /* accounts for fixed navbar */
+      }}>
+        <img
+          src={CAT_IMAGES[cat]}
+          alt=""
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '130%',
+            objectFit: 'cover', objectPosition: 'center 25%',
+            transition: 'opacity 0.5s ease',   /* smooth on cat switch */
+          }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(247,244,240,1) 0%, rgba(26,20,16,0.45) 40%, rgba(26,20,16,0.2) 100%)',
+        }} />
+
+        {/* Breadcrumb */}
+        <div style={{
+          position: 'absolute', top: 100, left: 48,
+          display: 'flex', gap: 8, alignItems: 'center',
+          fontSize: 11, letterSpacing: '0.1em',
+          color: 'rgba(255,255,255,0.6)',
+        }}>
+          <Link to="/" style={{ color: 'inherit', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.target.style.color = '#fff'}
+            onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.6)'}
+          >Home</Link>
+          <span>/</span>
+          <span style={{ color: '#fff' }}>Shop</span>
+        </div>
+
+        {/* Headline — always visible, no opacity animation */}
+        <div style={{ position: 'absolute', bottom: 40, left: 48 }}>
           <div style={{
-            fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'var(--coral)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase',
+            color: 'var(--coral)', marginBottom: 10,
+            display: 'flex', alignItems: 'center', gap: 8,
           }}>
-            <div style={{ width: 24, height: 1, background: 'var(--coral)' }} />
+            <div style={{ width: 20, height: 1.5, background: 'var(--coral)' }} />
             Collezione 2025
           </div>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(56px, 8vw, 100px)',
-            lineHeight: 0.88,
-            letterSpacing: '0.02em',
+            fontSize: 'clamp(56px, 9vw, 120px)',
+            lineHeight: 0.88, color: 'var(--white)',
+            letterSpacing: '0.01em',
+            transition: 'opacity 0.3s',
           }}>
-            SHOP<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: '1px rgba(26,20,16,0.25)' }}>ALL</span>
+            {catLabel.toUpperCase()}
           </h1>
         </div>
 
-        {/* Filters bar */}
+        {/* Count ghost */}
         <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          paddingBottom: 32, borderBottom: '1px solid var(--border)',
-          flexWrap: 'wrap', gap: 16,
+          position: 'absolute', bottom: 40, right: 48,
+          fontFamily: 'var(--font-display)', fontSize: 72,
+          color: 'rgba(26,20,16,0.12)', lineHeight: 1,
+          userSelect: 'none',
         }}>
-          {/* Category tabs */}
-          <div style={{ display: 'flex', gap: 4 }}>
-            {CATEGORIES.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => handleCategory(key)}
-                style={{
-                  padding: '9px 20px',
-                  fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase',
-                  fontWeight: 500,
-                  background: activeCategory === key ? 'var(--coral)' : 'transparent',
-                  color: activeCategory === key ? 'var(--white)' : 'var(--white-dim)',
-                  border: activeCategory === key ? '1px solid var(--coral)' : '1px solid var(--border)',
-                  transition: 'all 0.2s',
-                }}
-              >
+          {String(list.length).padStart(2, '0')}
+        </div>
+      </div>
+
+      {/* ── Sticky filter bar ── */}
+      <div style={{
+        position: 'sticky', top: 74, zIndex: 100,
+        background: 'rgba(247,244,240,0.97)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--border)',
+      }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'stretch' }}>
+          {/* Category pills */}
+          <div style={{ display: 'flex', flex: 1, borderRight: '1px solid var(--border)' }}>
+            {CATS.map(({ key, label, count }) => (
+              <button key={key} onClick={() => handleCat(key)} style={{
+                padding: '17px 22px',
+                fontSize: 11, fontWeight: cat === key ? 600 : 400,
+                letterSpacing: '0.12em', textTransform: 'uppercase',
+                color: cat === key ? 'var(--coral)' : 'var(--white-dim)',
+                background: 'none', border: 'none',
+                borderBottom: cat === key ? '2px solid var(--coral)' : '2px solid transparent',
+                transition: 'all 0.2s',
+              }}>
                 {label}
+                <sup style={{ fontSize: 8, marginLeft: 3, opacity: 0.5 }}>{count}</sup>
               </button>
             ))}
           </div>
 
-          {/* Sort + count */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span style={{ fontSize: 12, color: 'var(--white-dim)' }}>
-              {filtered.length} prodotti
+          {/* Sort */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 0 0 20px' }}>
+            <span style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--white-dim)' }}>
+              Ordina
             </span>
-            <select
-              value={sort}
-              onChange={e => setSort(e.target.value)}
-              style={{
-                background: 'var(--dark-2)', color: 'var(--white)',
-                border: '1px solid var(--border)',
-                padding: '9px 16px',
-                fontSize: 12, outline: 'none',
-              }}
-            >
-              {SORT_OPTIONS.map(o => (
-                <option key={o.key} value={o.key}>{o.label}</option>
+            <select value={sort} onChange={e => setSort(e.target.value)} style={{
+              background: 'none', color: 'var(--white)', border: 'none',
+              fontSize: 11, fontFamily: 'var(--font-body)', outline: 'none', padding: '17px 4px',
+            }}>
+              {SORTS.map(o => (
+                <option key={o.key} value={o.key} style={{ background: 'var(--black)' }}>{o.label}</option>
               ))}
             </select>
           </div>
         </div>
+      </div>
 
-        {/* Product grid */}
-        <div ref={gridRef} style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 24,
-          paddingTop: 40, paddingBottom: 80,
-        }}>
-          {filtered.map(p => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--white-dim)' }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>😔</div>
-            <div style={{ fontSize: 18 }}>Nessun prodotto trovato</div>
+      {/* ── Product grid ── */}
+      <div className="container" style={{ paddingTop: 48, paddingBottom: 100 }}>
+        {list.length > 0 ? (
+          <div ref={gridRef} className="shop-grid">
+            {list.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '100px 0', color: 'var(--white-dim)' }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 80, opacity: 0.15 }}>:(</div>
+            <div style={{ fontSize: 18, marginTop: 12 }}>Nessun prodotto trovato</div>
           </div>
         )}
       </div>
 
       <style>{`
-        @media (max-width: 1200px) {
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: repeat(3, 1fr) !important; }
+        .shop-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px 16px;
         }
-        @media (max-width: 900px) {
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 500px) {
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: 1fr !important; }
+        @media (max-width: 1200px) { .shop-grid { grid-template-columns: repeat(3,1fr); } }
+        @media (max-width: 900px)  { .shop-grid { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 480px)  { .shop-grid { grid-template-columns: repeat(2,1fr); gap: 12px 8px; } }
+        @media (max-width: 768px) {
+          div[style*="bottom: 40px"][style*="left: 48px"] { left: 20px !important; bottom: 24px !important; }
+          div[style*="bottom: 40px"][style*="right: 48px"] { display: none !important; }
+          div[style*="top: 100px"][style*="left: 48px"]   { left: 20px !important; top: 90px !important; }
         }
       `}</style>
     </div>
